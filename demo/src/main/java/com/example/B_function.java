@@ -10,7 +10,7 @@ public class B_function {
      * 
      * @param stringArray
      * @return
-     *         Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
+     * Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
      */
     private static String conjunctionArray_to_DNF(String[] stringArray) {
         String result = "";
@@ -194,9 +194,10 @@ public class B_function {
             }
             if(conjunction_code == 0)
                 conjunction_code = 1;
-            result *= conjunction_code * 10;
+            result *= conjunction_code;
+            
         }
-
+        result += Math.pow(10, String.valueOf(result).length() + 1) * conjunction.length ;
         return result;
     }
 
