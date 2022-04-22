@@ -2,7 +2,7 @@ package com.example;
 
 public class KeyValue{
     private long hash;
-    private BDD_Node Node;
+    public BDD_Node Node;
 
     KeyValue(long key, BDD_Node value){
         this.setHash(key);

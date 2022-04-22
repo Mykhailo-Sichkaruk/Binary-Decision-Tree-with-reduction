@@ -5,12 +5,12 @@ import java.util.Random;
 
 public class B_function {
 
-/**
+    /**
      * Returns DNF from Array of conjunctions
      * 
      * @param stringArray
      * @return
-     * Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
+     *         Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
      */
     private static String conjunctionArray_to_DNF(String[] stringArray) {
         String result = "";
@@ -88,7 +88,8 @@ public class B_function {
         String buf;
         for (int i = 0; i < result_pretty.length - 1; i++) {
             for (int j = 0; j < result_pretty.length - i - 1; j++) {
-                if (result_pretty[j].replaceAll("!", "").length() <= result_pretty[j + 1].replaceAll("!", "").length()) {
+                if (result_pretty[j].replaceAll("!", "").length() <= result_pretty[j + 1].replaceAll("!", "")
+                        .length()) {
                     buf = result_pretty[j];
                     result_pretty[j] = result_pretty[j + 1];
                     result_pretty[j + 1] = buf;
@@ -111,7 +112,7 @@ public class B_function {
      * @param b_function
      * @param order
      * @return
-     *         Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
+     * Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
      */
     public static String DNF_substitute_variable(boolean state, String letter, String b_function, String order) {
         String result = "";
@@ -157,7 +158,9 @@ public class B_function {
             result = "1";
         } else if (result.length() <= 1) {
             result = "0";
-        } else { // By not we have "+1BC+B+1C+BC" b_function, and we remove first "+" and every
+        } else if (result.contains("+;")) {
+            result = "0";
+        }else { // By not we have "+1BC+B+1C+BC" b_function, and we remove first "+" and every
                  // "1"
             result = result.replaceAll("\\+1", "+");
             result = result.replaceAll("1", "");
@@ -171,6 +174,7 @@ public class B_function {
 
         return result;
     }
+
     /**
      * Returns uniq ID that represents
      * 
@@ -192,12 +196,12 @@ public class B_function {
                     conjunction_code += Math.pow(3, j);
                 }
             }
-            if(conjunction_code == 0)
+            if (conjunction_code == 0)
                 conjunction_code = 1;
             result *= conjunction_code;
-            
+
         }
-        result += Math.pow(10, String.valueOf(result).length() + 1) * conjunction.length ;
+        result += Math.pow(10, String.valueOf(result).length() + 1) * conjunction.length;
         return result;
     }
 
@@ -238,13 +242,17 @@ public class B_function {
         for (int i = 0; i < count; i++) {
             function = generate_DNF(Alphabet, counjunction_count, max_length);
             letter = String.valueOf(Alphabet.charAt(rand.nextInt(Alphabet.length())));
-            System.out.println(function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
+            System.out.println(
+                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
             substituted_funciton = DNF_substitute_variable(false, letter, function, Alphabet);
-            System.out.println(substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+            System.out.println(
+                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
 
-            System.out.println(function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
+            System.out.println(
+                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
             substituted_funciton = DNF_substitute_variable(true, letter, function, Alphabet);
-            System.out.println(substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+            System.out.println(
+                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
 
             System.out.println("-----------------------------------------------");
         }
