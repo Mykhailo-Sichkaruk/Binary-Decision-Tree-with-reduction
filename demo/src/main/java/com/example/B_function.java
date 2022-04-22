@@ -141,7 +141,6 @@ public class B_function {
 
                     } else
                         result += "+" + sub_finctions[i].replaceAll("!" + letter, "1");
-
                 } // If there is A - forget this conjunction
                 else if (sub_finctions[i].contains(letter)) {
                     // Nothing
@@ -182,6 +181,11 @@ public class B_function {
      * @return
      */
     public static long b_function_hashCode(String b_func, String order) {
+        if(b_func.equals("1"))
+            return 1;
+        else if(b_func.equals("0"))
+            return 0;
+            
         long result = 1;
         int conjunction_code = 0;
 
@@ -206,13 +210,13 @@ public class B_function {
     }
 
     /**
-     * Returns DNF with conjunction_count of conjunctions, every conjunction lenght
-     * = conjunction_max_length, or could be less
+     * Returns generated DNF form of boolean function
      * 
      * @param Alphabet
      * @param conjunction_count
      * @param conjunction_max_length
-     * @return
+     * @return Boolean funciton
+     * "BAC+!AD+DB+C!A"
      */
     public static String generate_DNF(String Alphabet, int conjunction_count, int conjunction_max_length) {
         String result = "";
@@ -230,29 +234,37 @@ public class B_function {
         return result;
     }
 
-    public static void test_generate_substitute() {
-        int count = 10;
-        String Alphabet = "ABCDE";
-        int max_length = 3;
-        int counjunction_count = 10;
-        Random rand = new Random();
-        String function = "";
-        String substituted_funciton = "";
-        String letter = "";
-        for (int i = 0; i < count; i++) {
-            function = generate_DNF(Alphabet, counjunction_count, max_length);
-            letter = String.valueOf(Alphabet.charAt(rand.nextInt(Alphabet.length())));
-            System.out.println(
-                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
-            substituted_funciton = DNF_substitute_variable(false, letter, function, Alphabet);
-            System.out.println(
-                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+    /**
+     * Prints test of substitution in random boolean function 
+     * @param iterations_count = 10
+     * @param Alphabet = "ABCD"
+     */
+    public static void GenerationSubstitution_Test(Integer iterations_count, String Alphabet) {
+        //Default values
+        if (iterations_count == null) {
+            iterations_count = 10;
+        }
+        if (Alphabet == null) {
+            Alphabet = "ABCD";
+        }
 
-            System.out.println(
-                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
+
+        Random rand = new Random();
+        String function;
+        String substituted_funciton;
+        String letter;
+
+        for (int i = 0; i < iterations_count; i++) {
+            function = generate_DNF(Alphabet, 4, 4);
+            letter = String.valueOf(Alphabet.charAt(rand.nextInt(Alphabet.length())));
+            
+            System.out.println(function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
+            substituted_funciton = DNF_substitute_variable(false, letter, function, Alphabet);
+            System.out.println(substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+
+            System.out.println(function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
             substituted_funciton = DNF_substitute_variable(true, letter, function, Alphabet);
-            System.out.println(
-                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+            System.out.println(substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
 
             System.out.println("-----------------------------------------------");
         }

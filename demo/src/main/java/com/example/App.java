@@ -6,7 +6,7 @@ package com.example;
  */
 public class App 
 {   
-    private final static String b_function = "ABC+CAB+BAC+BC+BA+AC+!AC+!AB+DC+!DC+AD+DA+!AD";
+    private final static String b_function = "AB+CD+!AC+!BD";
     private final static String order = "ABCD";
     public static void main( String[] args )
     {
