@@ -112,11 +112,16 @@ public class B_function {
      * @param b_function
      * @param order
      * @return
-     * Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
+     *         Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
      */
-    public static String DNF_substitute_variable(boolean state, String letter, String b_function, String order) {
+    public static String DNF_substitute_variable(boolean state, String letter, String Bfunction, String order) {
+        if (Bfunction.equals("1"))
+            return "1";
+        else if (Bfunction.equals("0"))
+            return "0";
+
         String result = "";
-        String[] sub_finctions = b_function.split("\\+");
+        String[] sub_finctions = Bfunction.split("\\+");
 
         sub_finctions = pretty_dnf(sub_finctions, order);
         sub_finctions = delete_duplicates(sub_finctions);
@@ -159,7 +164,7 @@ public class B_function {
             result = "0";
         } else if (result.contains("+;")) {
             result = "0";
-        }else { // By not we have "+1BC+B+1C+BC" b_function, and we remove first "+" and every
+        } else { // By not we have "+1BC+B+1C+BC" b_function, and we remove first "+" and every
                  // "1"
             result = result.replaceAll("\\+1", "+");
             result = result.replaceAll("1", "");
@@ -181,11 +186,11 @@ public class B_function {
      * @return
      */
     public static long b_function_hashCode(String b_func, String order) {
-        if(b_func.equals("1"))
+        if (b_func.equals("1"))
             return 1;
-        else if(b_func.equals("0"))
+        else if (b_func.equals("0"))
             return 0;
-            
+
         long result = 1;
         int conjunction_code = 0;
 
@@ -216,7 +221,7 @@ public class B_function {
      * @param conjunction_count
      * @param conjunction_max_length
      * @return Boolean funciton
-     * "BAC+!AD+DB+C!A"
+     *         "BAC+!AD+DB+C!A"
      */
     public static String generate_DNF(String Alphabet, int conjunction_count, int conjunction_max_length) {
         String result = "";
@@ -235,19 +240,19 @@ public class B_function {
     }
 
     /**
-     * Prints test of substitution in random boolean function 
+     * Prints test of substitution in random boolean function
+     * 
      * @param iterations_count = 10
-     * @param Alphabet = "ABCD"
+     * @param Alphabet         = "ABCD"
      */
     public static void GenerationSubstitution_Test(Integer iterations_count, String Alphabet) {
-        //Default values
+        // Default values
         if (iterations_count == null) {
             iterations_count = 10;
         }
         if (Alphabet == null) {
             Alphabet = "ABCD";
         }
-
 
         Random rand = new Random();
         String function;
@@ -257,14 +262,18 @@ public class B_function {
         for (int i = 0; i < iterations_count; i++) {
             function = generate_DNF(Alphabet, 4, 4);
             letter = String.valueOf(Alphabet.charAt(rand.nextInt(Alphabet.length())));
-            
-            System.out.println(function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
-            substituted_funciton = DNF_substitute_variable(false, letter, function, Alphabet);
-            System.out.println(substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
 
-            System.out.println(function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
+            System.out.println(
+                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
+            substituted_funciton = DNF_substitute_variable(false, letter, function, Alphabet);
+            System.out.println(
+                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+
+            System.out.println(
+                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
             substituted_funciton = DNF_substitute_variable(true, letter, function, Alphabet);
-            System.out.println(substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+            System.out.println(
+                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
 
             System.out.println("-----------------------------------------------");
         }

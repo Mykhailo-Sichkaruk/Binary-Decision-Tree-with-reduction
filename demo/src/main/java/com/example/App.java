@@ -11,6 +11,7 @@ public class App
     public static void main( String[] args )
     {
         BDD_Tree Tree = new BDD_Tree(b_function, order);
+        Tree.PrintTree();
         //B_function.test_generate_substitute();
         //System.out.println(B_function.DNF_substitute_variable(false, "C", "C", "c"));
     }
