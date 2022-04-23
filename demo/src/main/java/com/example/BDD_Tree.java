@@ -4,7 +4,7 @@ import java.net.SocketPermission;
 import java.util.ArrayList;
 
 public class BDD_Tree {
-    private BDD_Node Root = null;
+    public BDD_Node Root = null;
     private String order;
     private int Node_count = 0;
     public BDD_Node ONE = new BDD_Node("1", "", "");
@@ -15,22 +15,14 @@ public class BDD_Tree {
         this.order = order;
         String prettier_Bfunction = B_function.DNF_substitute_variable(true, "Z", b_function, "Z" + order);
         this.Root = new BDD_Node(prettier_Bfunction, String.valueOf(order.charAt(0)), order);
-        System.out.println(this.Root.b_function);
-        System.out.println("--------------------------------");
 
         // Creating other levels
         for (int i = 2; i <= order.length() + 1; i++) {
             KeyValue[] Table = new KeyValue[(int) Math.pow(2, i - 1)];
             CreateLvl(i, 1, Table, this.Root);
-            for (int j = 0; j < Table.length; j++)
-                if (Table[j] != null)
-                    System.out.println(Table[j].getNode().b_function);
-
-            System.out.println("--------------------------------");
         }
 
-        System.out.println("Max     Nodes_count = " + (int) (Math.pow(2, this.order.length()) - 1));
-        System.out.println("Current Nodes_count = " + this.Node_count);
+
 
     }
 
@@ -43,12 +35,12 @@ public class BDD_Tree {
      * @param Root
      */
     private void CreateLvl(int lvl, int current, KeyValue[] Table, BDD_Node Root) {
-        if (Root.b_function.equals("1")){
+        if (Root.b_function.equals("1")) {
             Root.left = InsertTable(Table, "0", "", "");
             return;
         }
 
-        else if (Root.b_function.equals("0")){
+        else if (Root.b_function.equals("0")) {
             Root.right = InsertTable(Table, "1", "", "");
             return;
         }
@@ -107,24 +99,39 @@ public class BDD_Tree {
 
     }
 
-    public void PrintTree(){
-        for(int i = 1; i <= this.order.length() + 1; i++){
+    public void PrintTree() {
+        for (int i = 1; i <= this.order.length() + 1; i++) {
             PrintLvl(i, 1, this.Root);
             System.out.println("\n-------------------------------\n");
         }
     }
 
-    private void PrintLvl(int lvl, int current, BDD_Node Root){
-        if(lvl == current){
-            System.out.print(Root.b_function + " | ");
-        }
-        else{
-            if(Root.b_function.equals("1") || Root.b_function.equals("0"))
+    private void PrintLvl(int lvl, int current, BDD_Node Root) {
+        if (lvl == current) {
+            System.out.print("[" + Root.b_function + "] ");
+        } else {
+            if (Root.b_function.equals("1") || Root.b_function.equals("0"))
                 return;
 
             PrintLvl(lvl, current + 1, Root.left);
             PrintLvl(lvl, current + 1, Root.right);
         }
-        //Complete PRINT
-    } 
+    }
+
+    public char BDD_USE(String Arguments, BDD_Node Root) {
+        char result = '-';
+        if (Root.b_function.equals("1"))
+            return '1';
+        else if (Root.b_function.equals("0"))
+            return '0';
+        else {
+            if (Arguments.charAt(0) == '1')
+                result = BDD_USE(Arguments.substring(1), Root.right);
+            else if (Arguments.charAt(0) == '0')
+                result = BDD_USE(Arguments.substring(1), Root.left);
+        }
+
+        return result;
+
+    }
 }
