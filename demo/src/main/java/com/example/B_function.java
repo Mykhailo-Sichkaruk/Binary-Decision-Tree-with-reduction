@@ -3,6 +3,13 @@ package com.example;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Class that provides functionality in 
+ * generating DNF Bfuncitons
+ * substitution of one variable in DNF
+ * substitution of all variables in DNF
+ * getting HashCode of DNF
+ */
 public class B_function {
 
     /**
@@ -114,7 +121,7 @@ public class B_function {
      * @return
      *         Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
      */
-    public static String DNF_substitute_variable(boolean state, String letter, String Bfunction, String order) {
+    public static String SubstituteVariable_DNF(boolean state, String letter, String Bfunction, String order) {
         if (Bfunction.equals("1"))
             return "1";
         else if (Bfunction.equals("0"))
@@ -265,13 +272,13 @@ public class B_function {
 
             System.out.println(
                     function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
-            substituted_funciton = DNF_substitute_variable(false, letter, function, Alphabet);
+            substituted_funciton = SubstituteVariable_DNF(false, letter, function, Alphabet);
             System.out.println(
                     substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
 
             System.out.println(
                     function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
-            substituted_funciton = DNF_substitute_variable(true, letter, function, Alphabet);
+            substituted_funciton = SubstituteVariable_DNF(true, letter, function, Alphabet);
             System.out.println(
                     substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
 
@@ -279,4 +286,43 @@ public class B_function {
         }
     }
 
+    /**
+     * Returns result of substitution of variables in DNF function- "0" or "1"
+     * @param State : array of variables value - "1010"
+     * @param Bfunction : DNF function - "A!B+CD+!AD"
+     * @param Order : Varibles thas appears in Bfunction - "ABCD"
+     * @return
+     * "1" / "0"
+     */
+    public static String SubstituteAllVariables_DNF(String State, String Bfunction, String Order){
+        String result = "-";
+        String letter;
+        
+        for(int i = 0; i < Order.length(); i++){
+            letter = String.valueOf(Order.charAt(i));
+
+            if(State.charAt(i) == '1'){
+                result = Bfunction.replaceAll("!" + letter, "0");
+                result = Bfunction.replaceAll(letter, "1");
+            }
+            else{
+                result = Bfunction.replaceAll("!" + letter, "1");
+                result = Bfunction.replaceAll(letter, "0");
+            }
+        }
+
+        String[] conjunction = result.split("\\+");
+
+        for(int i = 0; i < conjunction.length; i++){
+            if(conjunction[i].contains("0")){
+
+            }
+            else{
+                return "1";
+            }
+
+        }
+
+        return "0";
+    }
 }
