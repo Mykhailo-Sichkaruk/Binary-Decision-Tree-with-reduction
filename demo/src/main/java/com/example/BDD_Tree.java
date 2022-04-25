@@ -16,6 +16,7 @@ public class BDD_Tree {
         this.Order = order;
         String prettier_Bfunction = B_function.SubstituteVariable_DNF(true, "Z", b_function, "Z" + order);
         this.Root = new BDD_Node(prettier_Bfunction, String.valueOf(order.charAt(0)), order);
+        this.Node_count += 3;
 
         // Creating other levels
         for (int i = 2; i <= order.length() + 1; i++) {
@@ -105,9 +106,11 @@ public class BDD_Tree {
             PrintLvl(i, 1, this.Root);
             System.out.println("\n-------------------------------\n");
         }
-        double ReductionRate = this.Node_count / (int)(Math.pow(2, this.Order.length()));
+        int NodesMaxCount =((int)(Math.pow(2, this.Order.length())));
+        float count = (float)this.Node_count;
+        double ReductionRate = ( count / NodesMaxCount);
         System.out.println("Count of node in the Tree      : " + this.Node_count );
-        System.out.println("Count of node without reduction: " + (int)(Math.pow(2, this.Order.length())));
+        System.out.println("Count of node without reduction: " + NodesMaxCount);
         System.out.println("Reduction efficiency: " + ReductionRate);
     }
 

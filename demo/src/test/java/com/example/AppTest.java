@@ -8,17 +8,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Unit test for simple App.
  */
 class AppTest {
-    private final static String Bfunction = "!D";
-    private final static String Order = "ABCD";
+    private final static String Alphabet = "ABCD";
 
     private static int DEFAULT_TEST_COUNT = 100;
-    BDD_Tree Tree = new BDD_Tree(Bfunction, Order);
     /**
      * Rigorous Test.
      */
     @Test
     void BDDuseTest() {
-        BDDuse_Test(Tree);
+        for(int i = 0; i < 100; i++){
+            String Bfunction = B_function.generate_DNF(Alphabet, 10, Alphabet.length() + 1);
+            BDD_Tree Tree = new BDD_Tree(Bfunction, Alphabet);
+            BDDuse_Test(Tree);
+            Tree.PrintTree();
+        }
     }
     
 
