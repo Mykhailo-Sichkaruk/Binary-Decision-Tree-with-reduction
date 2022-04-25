@@ -1,5 +1,12 @@
 package com.example;
 
+/**
+ * This class represents BDD Tree Node with:
+ * Boolean function 
+ * Letter what will be substituted
+ * Order of variables - "ABCD"
+ * Left and Right pointers to new Nodes with smaller function 
+ */
 public class BDD_Node{
     public String b_function;
     public String letter; 

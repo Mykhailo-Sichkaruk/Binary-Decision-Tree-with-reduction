@@ -294,20 +294,25 @@ public class B_function {
      * @return
      * "1" / "0"
      */
-    public static String SubstituteAllVariables_DNF(String State, String Bfunction, String Order){
-        String result = "-";
+    public static char SubstituteAllVariables_DNF(String State, String Bfunction, String Order){
+        String result = Bfunction;
         String letter;
+
+        if(State.length() != Order.length()){
+            System.out.println("ERR");
+            return '9';
+        }
         
         for(int i = 0; i < Order.length(); i++){
             letter = String.valueOf(Order.charAt(i));
 
             if(State.charAt(i) == '1'){
-                result = Bfunction.replaceAll("!" + letter, "0");
-                result = Bfunction.replaceAll(letter, "1");
+                result = result.replaceAll("!" + letter, "0");
+                result = result.replaceAll(letter, "1");
             }
             else{
-                result = Bfunction.replaceAll("!" + letter, "1");
-                result = Bfunction.replaceAll(letter, "0");
+                result = result.replaceAll("!" + letter, "1");
+                result = result.replaceAll(letter, "0");
             }
         }
 
@@ -318,11 +323,11 @@ public class B_function {
 
             }
             else{
-                return "1";
+                return '1';
             }
 
         }
 
-        return "0";
+        return '0';
     }
 }

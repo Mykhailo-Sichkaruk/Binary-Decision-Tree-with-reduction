@@ -1,5 +1,10 @@
 package com.example;
 
+/**
+ * This class represents basic object KEY:VALUE idea
+ * KEY : hash of Boolean Function
+ * VALUE : Pointer to BDD_Node that represents Boolean function
+ */
 public class KeyValue{
     private long hash;
     public BDD_Node Node;

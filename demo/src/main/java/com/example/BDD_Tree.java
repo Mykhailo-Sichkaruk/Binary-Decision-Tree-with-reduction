@@ -1,18 +1,19 @@
 package com.example;
 
+import java.io.ObjectOutputStream.PutField;
 import java.net.SocketPermission;
 import java.util.ArrayList;
 
 public class BDD_Tree {
     public BDD_Node Root = null;
-    private String order;
+    private String Order = "";
     private int Node_count = 0;
     public BDD_Node ONE = new BDD_Node("1", "", "");
     BDD_Node ZERO = new BDD_Node("0", "", "");;
 
     BDD_Tree(String b_function, String order) {
         // Creating: Root, "1", "0"
-        this.order = order;
+        this.Order = order;
         String prettier_Bfunction = B_function.SubstituteVariable_DNF(true, "Z", b_function, "Z" + order);
         this.Root = new BDD_Node(prettier_Bfunction, String.valueOf(order.charAt(0)), order);
 
@@ -100,10 +101,14 @@ public class BDD_Tree {
     }
 
     public void PrintTree() {
-        for (int i = 1; i <= this.order.length() + 1; i++) {
+        for (int i = 1; i <= this.Order.length() + 1; i++) {
             PrintLvl(i, 1, this.Root);
             System.out.println("\n-------------------------------\n");
         }
+        double ReductionRate = this.Node_count / (int)(Math.pow(2, this.Order.length()));
+        System.out.println("Count of node in the Tree      : " + this.Node_count );
+        System.out.println("Count of node without reduction: " + (int)(Math.pow(2, this.Order.length())));
+        System.out.println("Reduction efficiency: " + ReductionRate);
     }
 
     private void PrintLvl(int lvl, int current, BDD_Node Root) {
@@ -125,13 +130,30 @@ public class BDD_Tree {
         else if (Root.b_function.equals("0"))
             return '0';
         else {
-            if (Arguments.charAt(0) == '1')
+            if (Arguments.charAt(0) == '1'){
                 result = BDD_USE(Arguments.substring(1), Root.right);
-            else if (Arguments.charAt(0) == '0')
+            }
+            else if (Arguments.charAt(0) == '0'){
                 result = BDD_USE(Arguments.substring(1), Root.left);
+            }
         }
 
         return result;
 
     }
+
+    /**
+     * @return the order
+     */
+    public String getOrder() {
+        return Order;
+    }
+
+    /**
+     * @param order the order to set
+     */
+    public void setOrder(String order) {
+        Order = order;
+    }
+
 }
