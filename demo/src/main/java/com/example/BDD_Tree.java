@@ -14,7 +14,7 @@ public class BDD_Tree {
     BDD_Tree(String b_function, String order) {
         // Creating: Root, "1", "0"
         this.Order = order;
-        String prettier_Bfunction = B_function.SubstituteVariable_DNF(true, "Z", b_function, "Z" + order);
+        String prettier_Bfunction =DNF.SubstituteVariable(true, "Z", b_function, "Z" + order);
         this.Root = new BDD_Node(prettier_Bfunction, String.valueOf(order.charAt(0)), order);
         this.Node_count += 3;
 
@@ -50,11 +50,11 @@ public class BDD_Tree {
         if (lvl == current + 1) {
             String new_order = Root.order.substring(1);
             String letter = String.valueOf(Root.order.charAt(0));
-            String function = B_function.SubstituteVariable_DNF(false, letter, Root.b_function, Root.order);
+            String function =DNF.SubstituteVariable(false, letter, Root.b_function, Root.order);
 
             Root.left = InsertTable(Table, function, new_order, letter);
 
-            function = B_function.SubstituteVariable_DNF(true, letter, Root.b_function, Root.order);
+            function =DNF.SubstituteVariable(true, letter, Root.b_function, Root.order);
 
             Root.right = InsertTable(Table, function, new_order, letter);
 
@@ -79,7 +79,7 @@ public class BDD_Tree {
         else if (Bfunction.equals("0"))
             return ZERO;
 
-        long newNode_hash = B_function.b_function_hashCode(Bfunction, Order);
+        long newNode_hash =DNF.HashCode(Bfunction, Order);
 
         // Search if there is existing Node with such a Hashcode, then return exsisting
         // one

@@ -10,16 +10,15 @@ import java.util.Random;
  * substitution of all variables in DNF
  * getting HashCode of DNF
  */
-public class B_function {
+public class DNF {
 
     /**
-     * Returns DNF from Array of conjunctions
-     * 
+     * Returns String DNF from Array of conjunctions
      * @param stringArray
      * @return
-     *         Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
+     * Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
      */
-    private static String conjunctionArray_to_DNF(String[] stringArray) {
+    private static String ConjunctionArrayToDNF(String[] stringArray) {
         String result = "";
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < stringArray.length; i++) {
@@ -31,19 +30,18 @@ public class B_function {
     }
 
     /**
-     * Gets Array of conjunctions and returns Array without duplicates
-     * 
-     * @param b_functions
+     * Returns Array of conjunctions without duplicates
+     * @param conjunction
      * @return
-     *         Example :: "AB", "A", "AC", "BC", "A", "AB" ==> "AB", "A", "AC", "BC"
+     * Example :: "AB", "A", "AC", "BC", "A", "AB" ==> "AB", "A", "AC", "BC"
      */
-    private static String[] delete_duplicates(String[] b_functions) {
+    private static String[] DeleteDuplicates(String[] conjunction) {
         ArrayList<String> result_pretty_NOduplicates_ArrayList = new ArrayList<String>();
 
-        for (int i = 0; i < b_functions.length; i++) {
+        for (int i = 0; i < conjunction.length; i++) {
             // Push if there wasn`t such before
-            if (!result_pretty_NOduplicates_ArrayList.contains(b_functions[i])) {
-                result_pretty_NOduplicates_ArrayList.add(b_functions[i]);
+            if (!result_pretty_NOduplicates_ArrayList.contains(conjunction[i])) {
+                result_pretty_NOduplicates_ArrayList.add(conjunction[i]);
             }
         }
         String[] result_pretty_NOduplicates = result_pretty_NOduplicates_ArrayList
@@ -60,7 +58,7 @@ public class B_function {
      * @return
      *         Example :: BBCCAA ==> ABC (if order = "ABC")
      */
-    private static String pretty_conjuction(String b_function, String order) {
+    private static String PrettyConjunction(String b_function, String order) {
         String result = "";
         for (int i = 0; i < order.length(); i++) {
             if (b_function.contains("!" + String.valueOf(order.charAt(i)))) {
@@ -78,17 +76,17 @@ public class B_function {
      * conjunction
      * closer to start of array
      * 
-     * @param b_functions
+     * @param conjunction
      * @param order
      * @return
      *         Example :: BAC+CCA+DDD+!A!B!A ==> ABC+AC+!A!B+D (if order = "ABCD")
      */
-    private static String[] pretty_dnf(String[] b_functions, String order) {
-        String[] result_pretty = b_functions;
+    private static String[] Pretty(String[] conjunction, String order) {
+        String[] result_pretty = conjunction;
 
         // Make prettier every conjunction
         for (int i = 0; i < result_pretty.length; i++) {
-            result_pretty[i] = pretty_conjuction(result_pretty[i], order);
+            result_pretty[i] = PrettyConjunction(result_pretty[i], order);
         }
 
         // Bubble sort to put biggest conjunction in beggining of array
@@ -121,7 +119,7 @@ public class B_function {
      * @return
      *         Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
      */
-    public static String SubstituteVariable_DNF(boolean state, String letter, String Bfunction, String order) {
+    public static String SubstituteVariable(boolean state, String letter, String Bfunction, String order) {
         if (Bfunction.equals("1"))
             return "1";
         else if (Bfunction.equals("0"))
@@ -130,8 +128,8 @@ public class B_function {
         String result = "";
         String[] sub_finctions = Bfunction.split("\\+");
 
-        sub_finctions = pretty_dnf(sub_finctions, order);
-        sub_finctions = delete_duplicates(sub_finctions);
+        sub_finctions = Pretty(sub_finctions, order);
+        sub_finctions = DeleteDuplicates(sub_finctions);
 
         if (state) { // If A = 1
             for (int i = 0; i < sub_finctions.length; i++) {
@@ -183,7 +181,7 @@ public class B_function {
         }
 
         // Removes duplicates after substitution of variable
-        result = conjunctionArray_to_DNF(delete_duplicates(result.split("\\+")));
+        result = ConjunctionArrayToDNF(DeleteDuplicates(result.split("\\+")));
 
         return result;
     }
@@ -194,7 +192,7 @@ public class B_function {
      * @param b_func
      * @return
      */
-    public static long b_function_hashCode(String b_func, String order) {
+    public static long HashCode(String b_func, String order) {
         if (b_func.equals("1"))
             return 1;
         else if (b_func.equals("0"))
@@ -231,7 +229,7 @@ public class B_function {
      * @return String DNF      
      * Example :: "BAC+!AD+DB+C!A"
      */
-    public static String GenerateDNF(String alphabet, int conjunctionsMaxCount, int conjunctionMaxLength) {
+    public static String Generate(String alphabet, int conjunctionsMaxCount, int conjunctionMaxLength) {
         String result = "";
         Random rand = new Random();
         conjunctionsMaxCount = rand.nextInt(conjunctionsMaxCount);
@@ -254,47 +252,7 @@ public class B_function {
             return result;
         }
     }
-
-    /**
-     * Prints test of substitution in random boolean function
-     * 
-     * @param iterations_count = 10
-     * @param alphabet         = "ABCD"
-     */
-    public static void GenerationSubstitution_Test(Integer iterations_count, String alphabet) {
-        // Default values
-        if (iterations_count == null) {
-            iterations_count = 10;
-        }
-        if (alphabet == null) {
-            alphabet = "ABCD";
-        }
-
-        Random rand = new Random();
-        String function;
-        String substituted_funciton;
-        String letter;
-
-        for (int i = 0; i < iterations_count; i++) {
-            function = GenerateDNF(alphabet, 4, 4);
-            letter = String.valueOf(alphabet.charAt(rand.nextInt(alphabet.length())));
-
-            System.out.println(
-                    function + "\thash() = " + b_function_hashCode(function, alphabet) + "\t" + letter + " = 0");
-            substituted_funciton = SubstituteVariable_DNF(false, letter, function, alphabet);
-            System.out.println(
-                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, alphabet));
-
-            System.out.println(
-                    function + "\thash() = " + b_function_hashCode(function, alphabet) + "\t" + letter + " = 1");
-            substituted_funciton = SubstituteVariable_DNF(true, letter, function, alphabet);
-            System.out.println(
-                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, alphabet));
-
-            System.out.println("-----------------------------------------------");
-        }
-    }
-
+    
     /**
      * Returns result of substitution of variables in DNF function- "0" or "1"
      * 
@@ -304,7 +262,7 @@ public class B_function {
      * @return
      *         "1" / "0"
      */
-    public static char SubstituteAllVariables_DNF(String State, String Bfunction, String Order) {
+    public static char SubstituteAllVariables(String State, String Bfunction, String Order) {
         String result = Bfunction;
         String letter;
 

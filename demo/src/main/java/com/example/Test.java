@@ -12,7 +12,7 @@ public class Test {
         int StateVariations = (int )Math.pow(2, Tree.getOrder().length());
         
         for(int i = 0; i < StateVariations; i++){
-            Alternative_result = B_function.SubstituteAllVariables_DNF(Integer.toBinaryString(i), Tree.Root.b_function, Tree.Root.order);
+            Alternative_result =DNF.SubstituteAllVariables(Integer.toBinaryString(i), Tree.Root.b_function, Tree.Root.order);
             BDD_USE_result = Tree.BDD_USE(Integer.toBinaryString(i), Tree.Root);
             System.out.println();
         }
