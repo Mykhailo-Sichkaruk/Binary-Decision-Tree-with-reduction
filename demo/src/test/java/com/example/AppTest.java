@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Unit test for simple App.
  */
 class AppTest {
+    private final static int BDDuse_COUNT = 100;
+    private final static int GenerateDNF_COUNT = 100;
     private final static String Alphabet = "ABCD";
 
     private static int DEFAULT_TEST_COUNT = 100;
@@ -16,8 +18,8 @@ class AppTest {
      */
     @Test
     void BDDuseTest() {
-        for(int i = 0; i < 100; i++){
-            String Bfunction = B_function.generate_DNF(Alphabet, 10, Alphabet.length() + 1);
+        for(int i = 0; i < BDDuse_COUNT; i++){
+            String Bfunction = B_function.GenerateDNF(Alphabet, 10, Alphabet.length() + 1);
             BDD_Tree Tree = new BDD_Tree(Bfunction, Alphabet);
             BDDuse_Test(Tree);
             Tree.PrintTree();
@@ -45,5 +47,13 @@ class AppTest {
             assertEquals(BDD_USE_result, Alternative_result);
         }
 
+    }
+
+    @Test
+    void GenerateDnf_Test(){
+        System.out.println("Alphabet : " + Alphabet);
+        for (int i = 0; i < GenerateDNF_COUNT; i++) {
+            System.out.println(B_function.GenerateDNF(Alphabet, 10, Alphabet.length() + 1));
+        }
     }
 }

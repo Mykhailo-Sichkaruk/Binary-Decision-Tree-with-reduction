@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Class that provides functionality in 
+ * Class that provides functionality in
  * generating DNF Bfuncitons
  * substitution of one variable in DNF
  * substitution of all variables in DNF
@@ -147,11 +147,13 @@ public class B_function {
             }
         } else { // If A = 0
             for (int i = 0; i < sub_finctions.length; i++) {
-                // If there is !A - replace with "1", push to result
+                // If there is !A
                 if (sub_finctions[i].contains("!" + letter)) {
+                    // If there is !A*A == 0
                     if (sub_finctions[i].replaceAll("!" + letter, "1").contains(letter)) {
-
-                    } else
+                        // Nothing
+                    } // If single !A - replace with "1", push to result
+                    else
                         result += "+" + sub_finctions[i].replaceAll("!" + letter, "1");
                 } // If there is A - forget this conjunction
                 else if (sub_finctions[i].contains(letter)) {
@@ -222,43 +224,50 @@ public class B_function {
     }
 
     /**
-     * Returns generated DNF form of boolean function
-     * 
-     * @param Alphabet
-     * @param conjunction_count
-     * @param conjunction_max_length
-     * @return Boolean funciton
-     *         "BAC+!AD+DB+C!A"
+     * Returns random DNF
+     * @param alphabet              - letter in DNF
+     * @param conjunctionsMaxCount  - Max count of conjunctions
+     * @param conjunctionMaxLength  - Max length of conjunction 
+     * @return String DNF      
+     * Example :: "BAC+!AD+DB+C!A"
      */
-    public static String generate_DNF(String Alphabet, int conjunction_count, int conjunction_max_length) {
+    public static String GenerateDNF(String alphabet, int conjunctionsMaxCount, int conjunctionMaxLength) {
         String result = "";
         Random rand = new Random();
+        conjunctionsMaxCount = rand.nextInt(conjunctionsMaxCount);
 
-        for (int i = 0; i < conjunction_count; i++) {
-            int conjunction_lenght = rand.nextInt(conjunction_max_length);
-            if (conjunction_lenght > 0)
+        for (int i = 0; i < conjunctionsMaxCount; i++) {
+            int conjunction_lenght = rand.nextInt(conjunctionMaxLength);
+            if (conjunction_lenght > 0) {
                 result += "+";
-            for (int j = 0; j < conjunction_lenght; j++) {
-                result += ((rand.nextBoolean()) ? "!" : "") + Alphabet.charAt(rand.nextInt(Alphabet.length()));
+                for (int j = 0; j < conjunction_lenght; j++) {
+                    result += ((rand.nextBoolean()) ? "!" : "") + alphabet.charAt(rand.nextInt(alphabet.length()));
+                }
             }
         }
-        result = result.substring(1);
-        return result;
+
+
+        if (result.length() <= 1)
+            return ((rand.nextBoolean()) ? "!" : "") + alphabet.charAt(rand.nextInt(alphabet.length()));
+        else {
+            result = result.substring(1);
+            return result;
+        }
     }
 
     /**
      * Prints test of substitution in random boolean function
      * 
      * @param iterations_count = 10
-     * @param Alphabet         = "ABCD"
+     * @param alphabet         = "ABCD"
      */
-    public static void GenerationSubstitution_Test(Integer iterations_count, String Alphabet) {
+    public static void GenerationSubstitution_Test(Integer iterations_count, String alphabet) {
         // Default values
         if (iterations_count == null) {
             iterations_count = 10;
         }
-        if (Alphabet == null) {
-            Alphabet = "ABCD";
+        if (alphabet == null) {
+            alphabet = "ABCD";
         }
 
         Random rand = new Random();
@@ -267,20 +276,20 @@ public class B_function {
         String letter;
 
         for (int i = 0; i < iterations_count; i++) {
-            function = generate_DNF(Alphabet, 4, 4);
-            letter = String.valueOf(Alphabet.charAt(rand.nextInt(Alphabet.length())));
+            function = GenerateDNF(alphabet, 4, 4);
+            letter = String.valueOf(alphabet.charAt(rand.nextInt(alphabet.length())));
 
             System.out.println(
-                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 0");
-            substituted_funciton = SubstituteVariable_DNF(false, letter, function, Alphabet);
+                    function + "\thash() = " + b_function_hashCode(function, alphabet) + "\t" + letter + " = 0");
+            substituted_funciton = SubstituteVariable_DNF(false, letter, function, alphabet);
             System.out.println(
-                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, alphabet));
 
             System.out.println(
-                    function + "\thash() = " + b_function_hashCode(function, Alphabet) + "\t" + letter + " = 1");
-            substituted_funciton = SubstituteVariable_DNF(true, letter, function, Alphabet);
+                    function + "\thash() = " + b_function_hashCode(function, alphabet) + "\t" + letter + " = 1");
+            substituted_funciton = SubstituteVariable_DNF(true, letter, function, alphabet);
             System.out.println(
-                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, Alphabet));
+                    substituted_funciton + "\t\thash() = " + b_function_hashCode(substituted_funciton, alphabet));
 
             System.out.println("-----------------------------------------------");
         }
@@ -288,29 +297,29 @@ public class B_function {
 
     /**
      * Returns result of substitution of variables in DNF function- "0" or "1"
-     * @param State : array of variables value - "1010"
+     * 
+     * @param State     : array of variables value - "1010"
      * @param Bfunction : DNF function - "A!B+CD+!AD"
-     * @param Order : Varibles thas appears in Bfunction - "ABCD"
+     * @param Order     : Varibles thas appears in Bfunction - "ABCD"
      * @return
-     * "1" / "0"
+     *         "1" / "0"
      */
-    public static char SubstituteAllVariables_DNF(String State, String Bfunction, String Order){
+    public static char SubstituteAllVariables_DNF(String State, String Bfunction, String Order) {
         String result = Bfunction;
         String letter;
 
-        if(State.length() != Order.length()){
+        if (State.length() != Order.length()) {
             System.out.println("ERR");
             return '9';
         }
-        
-        for(int i = 0; i < Order.length(); i++){
+
+        for (int i = 0; i < Order.length(); i++) {
             letter = String.valueOf(Order.charAt(i));
 
-            if(State.charAt(i) == '1'){
+            if (State.charAt(i) == '1') {
                 result = result.replaceAll("!" + letter, "0");
                 result = result.replaceAll(letter, "1");
-            }
-            else{
+            } else {
                 result = result.replaceAll("!" + letter, "1");
                 result = result.replaceAll(letter, "0");
             }
@@ -318,11 +327,10 @@ public class B_function {
 
         String[] conjunction = result.split("\\+");
 
-        for(int i = 0; i < conjunction.length; i++){
-            if(conjunction[i].contains("0")){
+        for (int i = 0; i < conjunction.length; i++) {
+            if (conjunction[i].contains("0")) {
 
-            }
-            else{
+            } else {
                 return '1';
             }
 
