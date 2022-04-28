@@ -14,9 +14,10 @@ public class DNF {
 
     /**
      * Returns String DNF from Array of conjunctions
+     * 
      * @param stringArray
      * @return
-     * Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
+     *         Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
      */
     private static String ConjunctionArrayToDNF(String[] stringArray) {
         String result = "";
@@ -31,22 +32,23 @@ public class DNF {
 
     /**
      * Returns Array of conjunctions without duplicates
+     * 
      * @param conjunction
      * @return
-     * Example :: "AB", "A", "AC", "BC", "A", "AB" ==> "AB", "A", "AC", "BC"
+     *         Example :: "AB", "A", "AC", "BC", "A", "AB" ==> "AB", "A", "AC", "BC"
      */
     private static String[] DeleteDuplicates(String[] conjunction) {
-        ArrayList<String> result_pretty_NOduplicates_ArrayList = new ArrayList<String>();
+        ArrayList<String> result_NOduplicates_ArrayList = new ArrayList<String>();
 
         for (int i = 0; i < conjunction.length; i++) {
             // Push if there wasn`t such before
-            if (!result_pretty_NOduplicates_ArrayList.contains(conjunction[i])) {
-                result_pretty_NOduplicates_ArrayList.add(conjunction[i]);
+            if (!result_NOduplicates_ArrayList.contains(conjunction[i])) {
+                result_NOduplicates_ArrayList.add(conjunction[i]);
             }
         }
-        String[] result_pretty_NOduplicates = result_pretty_NOduplicates_ArrayList
-                .toArray(new String[result_pretty_NOduplicates_ArrayList.size()]);
-        return result_pretty_NOduplicates;
+        String[] result_NOduplicates = result_NOduplicates_ArrayList
+                .toArray(new String[result_NOduplicates_ArrayList.size()]);
+        return result_NOduplicates;
     }
 
     /**
@@ -73,8 +75,7 @@ public class DNF {
     /**
      * Gets Array of conjunctions and make them prettier -
      * Removes duplicates of variables, put variables in specified order, put bigger
-     * conjunction
-     * closer to start of array
+     * conjunction closer to start of array
      * 
      * @param conjunction
      * @param order
@@ -82,27 +83,28 @@ public class DNF {
      *         Example :: BAC+CCA+DDD+!A!B!A ==> ABC+AC+!A!B+D (if order = "ABCD")
      */
     private static String[] Pretty(String[] conjunction, String order) {
-        String[] result_pretty = conjunction;
+        String[] result = conjunction;
 
         // Make prettier every conjunction
-        for (int i = 0; i < result_pretty.length; i++) {
-            result_pretty[i] = PrettyConjunction(result_pretty[i], order);
+        for (int i = 0; i < result.length; i++) {
+            result[i] = PrettyConjunction(result[i], order);
         }
 
         // Bubble sort to put biggest conjunction in beggining of array
         String buf;
-        for (int i = 0; i < result_pretty.length - 1; i++) {
-            for (int j = 0; j < result_pretty.length - i - 1; j++) {
-                if (result_pretty[j].replaceAll("!", "").length() <= result_pretty[j + 1].replaceAll("!", "")
+        for (int i = 0; i < result.length - 1; i++) {
+            for (int j = 0; j < result.length - i - 1; j++) {
+                if (result[j].replaceAll("!", "").length() <= result[j + 1].replaceAll("!", "")
                         .length()) {
-                    buf = result_pretty[j];
-                    result_pretty[j] = result_pretty[j + 1];
-                    result_pretty[j + 1] = buf;
+                    buf = result[j];
+                    result[j] = result[j + 1];
+                    result[j + 1] = buf;
                 }
             }
         }
 
-        return result_pretty;
+        result = DeleteDuplicates(result);
+        return result;
     }
 
     /**
@@ -125,20 +127,23 @@ public class DNF {
         else if (Bfunction.equals("0"))
             return "0";
 
+        // Preparing---------------------
         String result = "";
         String[] sub_finctions = Bfunction.split("\\+");
 
         sub_finctions = Pretty(sub_finctions, order);
-        sub_finctions = DeleteDuplicates(sub_finctions);
 
+        // Substitution--------------------
         if (state) { // If A = 1
             for (int i = 0; i < sub_finctions.length; i++) {
                 // If there is !A - forget this conjunction
                 if (sub_finctions[i].contains("!" + letter)) {
                     // Nothing
                 } // If there is A - replace with "1", push to result
+                else if (sub_finctions[i].equals(letter))
+                    return "1";
                 else if (sub_finctions[i].contains(letter)) {
-                    result += "+" + sub_finctions[i].replaceAll(letter, "1");
+                    result += "+" + sub_finctions[i].replaceAll(letter, "");
                 } // If there are not A or !A - push to result
                 else
                     result += "+" + sub_finctions[i];
@@ -151,8 +156,11 @@ public class DNF {
                     if (sub_finctions[i].replaceAll("!" + letter, "1").contains(letter)) {
                         // Nothing
                     } // If single !A - replace with "1", push to result
-                    else
-                        result += "+" + sub_finctions[i].replaceAll("!" + letter, "1");
+                    else if (sub_finctions[i].equals("!" + letter))
+                        return "1";
+                    else {
+                        result += "+" + sub_finctions[i].replaceAll("!" + letter, "");
+                    }
                 } // If there is A - forget this conjunction
                 else if (sub_finctions[i].contains(letter)) {
                     // Nothing
@@ -162,26 +170,15 @@ public class DNF {
             }
         }
 
-        result += ";";
-        if (result.contains("+1+")) {
-            result = "1";
-        } else if (result.contains("+1;")) {
-            result = "1";
-        } else if (result.length() <= 1) {
-            result = "0";
-        } else if (result.contains("+;")) {
-            result = "0";
-        } else { // By not we have "+1BC+B+1C+BC" b_function, and we remove first "+" and every
-                 // "1"
-            result = result.replaceAll("\\+1", "+");
-            result = result.replaceAll("1", "");
-            result = result.replaceAll(";", "");
+        if (result.length() == 0) {
+            return "0";
+        } else {
             result = result.substring(1);
-
         }
 
         // Removes duplicates after substitution of variable
-        result = ConjunctionArrayToDNF(DeleteDuplicates(result.split("\\+")));
+
+        result = ConjunctionArrayToDNF(Pretty(result.split("\\+"), order));
 
         return result;
     }
@@ -223,17 +220,18 @@ public class DNF {
 
     /**
      * Returns random DNF
-     * @param alphabet              - letter in DNF
-     * @param conjunctionsMaxCount  - Max count of conjunctions
-     * @param conjunctionMaxLength  - Max length of conjunction 
-     * @return String DNF      
-     * Example :: "BAC+!AD+DB+C!A"
+     * 
+     * @param alphabet             - letter in DNF
+     * @param conjunctionsMaxCount - Max count of conjunctions
+     * @param conjunctionMaxLength - Max length of conjunction
+     * @return String DNF
+     *         Example :: "BAC+!AD+DB+C!A"
      */
     public static String Generate(String alphabet, int conjunctionsMaxCount, int conjunctionMaxLength) {
         String result = "";
         Random rand = new Random();
-        conjunctionsMaxCount = rand.nextInt(conjunctionsMaxCount);
 
+        conjunctionsMaxCount = rand.nextInt(conjunctionsMaxCount);
         for (int i = 0; i < conjunctionsMaxCount; i++) {
             int conjunction_lenght = rand.nextInt(conjunctionMaxLength);
             if (conjunction_lenght > 0) {
@@ -244,7 +242,6 @@ public class DNF {
             }
         }
 
-
         if (result.length() <= 1)
             return ((rand.nextBoolean()) ? "!" : "") + alphabet.charAt(rand.nextInt(alphabet.length()));
         else {
@@ -252,7 +249,7 @@ public class DNF {
             return result;
         }
     }
-    
+
     /**
      * Returns result of substitution of variables in DNF function- "0" or "1"
      * 
@@ -295,5 +292,42 @@ public class DNF {
         }
 
         return '0';
+    }
+
+    /**
+     * Returns random DNF - without repeats, in Alphabet order
+     * 
+     * @param Alphabet         - Letter that will be used in DNF
+     * @param ConjunctionCount - Count of conjunctions (random by default)
+     * @return String DNF
+     * @Example "ABC+!AD+BD+!AC"
+     */
+    public static String GenerateDNF(String Alphabet, Integer ConjunctionCount) {
+        String result = "";
+        String conjunction = "";
+        Random rand = new Random();
+        if (ConjunctionCount == null) {
+            ConjunctionCount = rand.nextInt(Alphabet.length() + 1);
+        }
+
+        for (int i = 0; i < ConjunctionCount; i++) {
+            int conjunction_lenght = rand.nextInt(Alphabet.length());
+            if (conjunction_lenght > 0) {
+                conjunction = "";
+                for (int j = 0; j < Alphabet.length(); j++) {
+                    if (rand.nextBoolean())
+                        conjunction += ((rand.nextBoolean()) ? "!" : "") + Alphabet.charAt(j);
+                }
+                if (conjunction.length() != 0)
+                    result += "+" + conjunction;
+            }
+        }
+
+        if (result.length() <= 1)
+            return ((rand.nextBoolean()) ? "!" : "") + Alphabet.charAt(rand.nextInt(Alphabet.length()));
+        else {
+            result = result.substring(1);
+            return result;
+        }
     }
 }

@@ -14,7 +14,7 @@ public class BDD_Tree {
     BDD_Tree(String b_function, String order) {
         // Creating: Root, "1", "0"
         this.Order = order;
-        String prettier_Bfunction =DNF.SubstituteVariable(true, "Z", b_function, "Z" + order);
+        String prettier_Bfunction = DNF.SubstituteVariable(true, "Z", b_function, "Z" + order);
         this.Root = new BDD_Node(prettier_Bfunction, String.valueOf(order.charAt(0)), order);
         this.Node_count += 3;
 
@@ -23,8 +23,6 @@ public class BDD_Tree {
             KeyValue[] Table = new KeyValue[(int) Math.pow(2, i - 1)];
             CreateLvl(i, 1, Table, this.Root);
         }
-
-
 
     }
 
@@ -50,11 +48,11 @@ public class BDD_Tree {
         if (lvl == current + 1) {
             String new_order = Root.order.substring(1);
             String letter = String.valueOf(Root.order.charAt(0));
-            String function =DNF.SubstituteVariable(false, letter, Root.b_function, Root.order);
+            String function = DNF.SubstituteVariable(false, letter, Root.b_function, Root.order);
 
             Root.left = InsertTable(Table, function, new_order, letter);
 
-            function =DNF.SubstituteVariable(true, letter, Root.b_function, Root.order);
+            function = DNF.SubstituteVariable(true, letter, Root.b_function, Root.order);
 
             Root.right = InsertTable(Table, function, new_order, letter);
 
@@ -79,7 +77,7 @@ public class BDD_Tree {
         else if (Bfunction.equals("0"))
             return ZERO;
 
-        long newNode_hash =DNF.HashCode(Bfunction, Order);
+        long newNode_hash = DNF.HashCode(Bfunction, Order);
 
         // Search if there is existing Node with such a Hashcode, then return exsisting
         // one
@@ -102,16 +100,19 @@ public class BDD_Tree {
     }
 
     public void PrintTree() {
-        for (int i = 1; i <= this.Order.length() + 1; i++) {
+        for (int i = 1; i <= this.Order.length(); i++) {
             PrintLvl(i, 1, this.Root);
-            System.out.println("\n-------------------------------\n");
+            System.out.println("\n-------------------------------");
         }
-        int NodesMaxCount =((int)(Math.pow(2, this.Order.length())));
-        float count = (float)this.Node_count;
-        double ReductionRate = ( count / NodesMaxCount);
-        System.out.println("Count of node in the Tree      : " + this.Node_count );
+        System.out.println("\t" + "[" + this.ZERO.b_function + "]" + "\t" + "[" + this.ONE.b_function + "]");
+
+        int NodesMaxCount = ((int) (Math.pow(2, this.Order.length())));
+        float count = (float) this.Node_count;
+        double ReductionRate = (count / NodesMaxCount);
+        System.out.println("Count of node in the Tree      : " + this.Node_count);
         System.out.println("Count of node without reduction: " + NodesMaxCount);
         System.out.println("Reduction efficiency: " + ReductionRate);
+        System.out.println("================================================================================");
     }
 
     private void PrintLvl(int lvl, int current, BDD_Node Root) {
@@ -133,10 +134,9 @@ public class BDD_Tree {
         else if (Root.b_function.equals("0"))
             return '0';
         else {
-            if (Arguments.charAt(0) == '1'){
+            if (Arguments.charAt(0) == '1') {
                 result = BDD_USE(Arguments.substring(1), Root.right);
-            }
-            else if (Arguments.charAt(0) == '0'){
+            } else if (Arguments.charAt(0) == '0') {
                 result = BDD_USE(Arguments.substring(1), Root.left);
             }
         }

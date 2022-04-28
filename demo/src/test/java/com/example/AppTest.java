@@ -114,5 +114,13 @@ class AppTest {
     }
 
     @Test
+    void GenerateDNF_TEST(){
+        System.out.println("Alphabet : " + Alphabet);
+        for (int i = 0; i < Generate_COUNT; i++) {
+            System.out.println(DNF.GenerateDNF(Alphabet, null));
+        }
+    }
+
+    @Test
     void test(){}
 }
