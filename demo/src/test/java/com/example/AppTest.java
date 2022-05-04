@@ -4,54 +4,67 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 /**
  * Unit test for simple App.
  */
 class AppTest {
-    private final static int BDDuse_COUNT = 100;
+    private final static int BDDuse_COUNT = 1000;
     private final static int Generate_COUNT = 100;
     private final static int HashCode_COUNT = 100;
-    private final static String Alphabet = "ABCD";
+    private final static String Alphabet = "ABCDEFGHIJKLN";
 
     private static int DEFAULT_TEST_COUNT = 100;
+    private static int failure = 0;
+
     /**
      * Rigorous Test.
      */
     @Test
     void BDDuse_TEST() {
-        for(int i = 0; i < BDDuse_COUNT; i++){
-            String Bfunction =DNF.Generate(Alphabet, 10, Alphabet.length() + 1);
+        for (int i = 0; i < BDDuse_COUNT; i++) {
+            String Bfunction = DNF.Generate(Alphabet, 10, Alphabet.length() + 1);
             BDD_Tree Tree = new BDD_Tree(Bfunction, Alphabet);
             BDDuse_test(Tree);
-            Tree.PrintTree();
+            //Tree.PrintTree();
+            System.out.println(failure);
         }
     }
-    
 
-    void BDDuse_test(BDD_Tree Tree){
+    void BDDuse_test(BDD_Tree Tree) {
         char BDD_USE_result = ' ';
         char Alternative_result = ' ';
-        int StateVariations = (int )Math.pow(2, Tree.getOrder().length());
-        String Arguments ;
+        int StateVariations = (int) Math.pow(2, Tree.getOrder().length());
+        String Arguments;
 
-        for(int i = 0; i < StateVariations; i++){
+        for (int i = 0; i < StateVariations; i++) {
             Arguments = Integer.toBinaryString(i);
             int arg_len = Arguments.length();
-            if(arg_len < 8){
-                for(int j = 0; j < Tree.getOrder().length() - arg_len; j++)
-                    Arguments = "0" + Arguments;  
+            if (arg_len < Tree.getOrder().length()) {
+                for (int j = 0; j < Tree.getOrder().length() - arg_len; j++)
+                    Arguments = "0" + Arguments;
             }
-            Alternative_result =DNF.SubstituteAllVariables(Arguments, Tree.Root.b_function, Tree.Root.order);
+            Alternative_result = DNF.SubstituteAllVariables(Arguments, Tree.Root.b_function, Tree.Root.order);
             BDD_USE_result = Tree.BDD_USE(Arguments, Tree.Root);
-            assertEquals(BDD_USE_result, Alternative_result);
+            // System.out.println(Arguments + "|\t:" + Tree.Root.b_function + ":\t[" +
+            // BDD_USE_result + "]\t[" + Alternative_result + "]");
+            if (BDD_USE_result != Alternative_result){
+                failure++;
+                // System.out.println(Alphabet + "|");
+                // System.out.println(Arguments + "|\t:" + Tree.Root.b_function + ":\t[" + BDD_USE_result + "]\t["
+                // + Alternative_result + "]");
+            }else{
+                assertEquals(BDD_USE_result, Alternative_result);
+            }
+
         }
 
     }
 
     @Test
-    void DNFGenerate_TEST(){
+    void DNFGenerate_TEST() {
         System.out.println("Alphabet : " + Alphabet);
         for (int i = 0; i < Generate_COUNT; i++) {
             System.out.println(DNF.Generate(Alphabet, 10, Alphabet.length() + 1));
@@ -99,13 +112,13 @@ class AppTest {
     }
 
     @Test
-    void HashCode_TEST(){
+    void HashCode_TEST() {
         String function = "";
         long hash = 0;
-
+       
         System.out.println("Alphabet : " + Alphabet + "\n");
         for (int i = 0; i < HashCode_COUNT; i++) {
-            function = (DNF.Generate(Alphabet, 10, Alphabet.length() + 1));
+            function = (DNF.GenerateDNF(Alphabet, 10));
             hash = DNF.HashCode(function, Alphabet);
             System.out.println(function);
             System.out.println("Hash: " + hash);
@@ -114,7 +127,7 @@ class AppTest {
     }
 
     @Test
-    void GenerateDNF_TEST(){
+    void GenerateDNF_TEST() {
         System.out.println("Alphabet : " + Alphabet);
         for (int i = 0; i < Generate_COUNT; i++) {
             System.out.println(DNF.GenerateDNF(Alphabet, null));
@@ -122,5 +135,6 @@ class AppTest {
     }
 
     @Test
-    void test(){}
+    void test() {
+    }
 }

@@ -82,7 +82,7 @@ public class BDD_Tree {
         // Search if there is existing Node with such a Hashcode, then return exsisting
         // one
         for (int i = 0; i < Table.length; i++) {
-            if (Table[i] != null && Table[i].getHash() == newNode_hash) {
+            if (Table[i] != null && Table[i].getHash() == newNode_hash && Table[i].getNode().b_function.equals(Bfunction)) {
                 return Table[i].getNode();
             }
         }
@@ -127,6 +127,12 @@ public class BDD_Tree {
         }
     }
 
+    /**
+     * 
+     * @param Arguments
+     * @param Root
+     * @return
+     */
     public char BDD_USE(String Arguments, BDD_Node Root) {
         char result = '-';
         if (Root.b_function.equals("1"))

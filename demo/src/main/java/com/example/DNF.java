@@ -1,14 +1,16 @@
 package com.example;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Random;
 
 /**
  * Class that provides functionality in
- * generating DNF Bfuncitons
- * substitution of one variable in DNF
- * substitution of all variables in DNF
- * getting HashCode of DNF
+ * -generating DNF Bfuncitons
+ * -substitution of one variable in DNF
+ * -substitution of all variables in DNF
+ * -getting HashCode of DNF
  */
 public class DNF {
 
@@ -211,12 +213,60 @@ public class DNF {
             }
             if (conjunction_code == 0)
                 conjunction_code = 1;
-            result *= conjunction_code;
+
+            // System.out.print("*" + conjunction_code);
+            // if (order.length() > 8)
+            //     result += (result * conjunction_code) % 1234;
+            // else
+                result *= conjunction_code;
+
+            if (result > 9223372036854786L) {
+                result %= 100000000;
+                result ++;
+                // System.out.print("-");
+            }
 
         }
-        result += Math.pow(10, String.valueOf(result).length() + 1) * conjunction.length;
+        //System.out.print("\n");
+
+         result += Math.pow(10, String.valueOf(result).length()) * conjunction.length;
+        // System.out.println(result);
         return result;
     }
+
+    // public static BigInteger HashCodeBig(String b_func, String order) {
+    // if (b_func.equals("1"))
+    // return 1;
+    // else if (b_func.equals("0"))
+    // return 0;
+
+    // long result = 1;
+    // int conjunction_code = 0;
+
+    // String[] conjunction = b_func.split("\\+");
+
+    // for (int i = 0; i < conjunction.length; i++) {
+    // conjunction_code = 0;
+    // for (int j = 0; j < order.length(); j++) {
+    // if (conjunction[i].contains("!" + String.valueOf(order.charAt(j)))) {
+    // conjunction_code += 2 * Math.pow(3, j);
+    // } else if (conjunction[i].contains(String.valueOf(order.charAt(j)))) {
+    // conjunction_code += Math.pow(3, j);
+    // }
+    // }
+    // if (conjunction_code == 0)
+    // conjunction_code = 1;
+
+    // System.out.print("*" + conjunction_code);
+    // result *= conjunction_code;
+
+    // }
+    // System.out.print("\n");
+
+    // result += Math.pow(10, String.valueOf(result).length()) * conjunction.length;
+    // System.out.println(result);
+    // return result;
+    // }
 
     /**
      * Returns random DNF
@@ -330,4 +380,5 @@ public class DNF {
             return result;
         }
     }
+
 }
