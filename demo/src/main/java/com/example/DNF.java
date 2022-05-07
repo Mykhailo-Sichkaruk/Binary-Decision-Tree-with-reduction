@@ -226,11 +226,11 @@ public class DNF {
             //     result *= conjunction_code;
             //     //System.out.print("-");
             // } else
-            //     result *= conjunction_code;
+            //     result *= conjunction_code;}
                 
             res = res.multiply(BigInteger.valueOf(conjunction_code));
-
-        }
+            }
+        
         // System.out.print("\n");
         // result += Math.pow(10, String.valueOf(result).length()) * conjunction.length;
         //
@@ -238,7 +238,6 @@ public class DNF {
         BigInteger sub = (BigInteger.valueOf(10l)).pow(res.toString().length());
         sub = sub.multiply(BigInteger.valueOf(digits));
         res = res.add(sub);
-        // System.out.println(result);
         return res;
     }
 

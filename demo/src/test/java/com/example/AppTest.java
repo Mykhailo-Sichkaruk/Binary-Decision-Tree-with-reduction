@@ -28,7 +28,7 @@ class AppTest {
             String Bfunction = DNF.Generate(Alphabet, 10, Alphabet.length() + 1);
             BDD_Tree Tree = new BDD_Tree(Bfunction, Alphabet);
             BDDuse_test(Tree);
-            //Tree.PrintTree();
+            Tree.PrintTree();
             System.out.println(failure);
         }
     }
@@ -46,11 +46,11 @@ class AppTest {
                 for (int j = 0; j < Tree.getOrder().length() - arg_len; j++)
                     Arguments = "0" + Arguments;
             }
-            Alternative_result = DNF.SubstituteAllVariables(Arguments, Tree.Root.b_function, Tree.Root.order);
-            BDD_USE_result = Tree.BDD_USE(Arguments, Tree.Root);
+            Alternative_result = DNF.SubstituteAllVariables(Arguments, Tree.ROOT.b_function, Tree.ROOT.order);
+            BDD_USE_result = Tree.BDD_USE(Arguments, Tree.ROOT);
 
             if (BDD_USE_result != Alternative_result){
-                System.out.println(Arguments + "|\t:" + Tree.Root.b_function + ":\t[" +
+                System.out.println(Arguments + "|\t:" + Tree.ROOT.b_function + ":\t[" +
                 BDD_USE_result + "]\t[" + Alternative_result + "]");
                 failure++;
             }else{
