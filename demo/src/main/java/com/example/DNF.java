@@ -191,13 +191,14 @@ public class DNF {
      * @param b_func
      * @return
      */
-    public static long HashCode(String b_func, String order) {
+    public static BigInteger HashCode(String b_func, String order) {
         if (b_func.equals("1"))
-            return 1;
+            return BigInteger.valueOf(0);
         else if (b_func.equals("0"))
-            return 0;
+            return BigInteger.valueOf(1);
 
         long result = 1;
+        BigInteger res = BigInteger.valueOf(1);
         int conjunction_code = 0;
 
         String[] conjunction = b_func.split("\\+");
@@ -216,22 +217,29 @@ public class DNF {
 
             // System.out.print("*" + conjunction_code);
             // if (order.length() > 8)
-            //     result += (result * conjunction_code) % 1234;
+            // result += (result * conjunction_code) % 1234;
             // else
-                result *= conjunction_code;
 
-            if (result > 9223372036854786L) {
-                result %= 100000000;
-                result ++;
-                // System.out.print("-");
-            }
+            // if ((result * conjunction_code) > 922337203685477580L) {
+            //     result %= 10000000000L;
+            //     result++;
+            //     result *= conjunction_code;
+            //     //System.out.print("-");
+            // } else
+            //     result *= conjunction_code;
+                
+            res = res.multiply(BigInteger.valueOf(conjunction_code));
 
         }
-        //System.out.print("\n");
-
-         result += Math.pow(10, String.valueOf(result).length()) * conjunction.length;
+        // System.out.print("\n");
+        // result += Math.pow(10, String.valueOf(result).length()) * conjunction.length;
+        //
+        int digits =  conjunction.length;
+        BigInteger sub = (BigInteger.valueOf(10l)).pow(res.toString().length());
+        sub = sub.multiply(BigInteger.valueOf(digits));
+        res = res.add(sub);
         // System.out.println(result);
-        return result;
+        return res;
     }
 
     // public static BigInteger HashCodeBig(String b_func, String order) {

@@ -1,6 +1,7 @@
 package com.example;
 
 import java.io.ObjectOutputStream.PutField;
+import java.math.BigInteger;
 import java.net.SocketPermission;
 import java.util.ArrayList;
 
@@ -77,12 +78,12 @@ public class BDD_Tree {
         else if (Bfunction.equals("0"))
             return ZERO;
 
-        long newNode_hash = DNF.HashCode(Bfunction, Order);
+        BigInteger newNode_hash = DNF.HashCode(Bfunction, Order);
 
         // Search if there is existing Node with such a Hashcode, then return exsisting
         // one
         for (int i = 0; i < Table.length; i++) {
-            if (Table[i] != null && Table[i].getHash() == newNode_hash && Table[i].getNode().b_function.equals(Bfunction)) {
+            if (Table[i] != null && Table[i].getHash().equals(newNode_hash) && Table[i].getNode().b_function.equals(Bfunction)) {
                 return Table[i].getNode();
             }
         }

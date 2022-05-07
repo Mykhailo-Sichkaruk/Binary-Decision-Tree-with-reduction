@@ -48,13 +48,11 @@ class AppTest {
             }
             Alternative_result = DNF.SubstituteAllVariables(Arguments, Tree.Root.b_function, Tree.Root.order);
             BDD_USE_result = Tree.BDD_USE(Arguments, Tree.Root);
-            // System.out.println(Arguments + "|\t:" + Tree.Root.b_function + ":\t[" +
-            // BDD_USE_result + "]\t[" + Alternative_result + "]");
+
             if (BDD_USE_result != Alternative_result){
+                System.out.println(Arguments + "|\t:" + Tree.Root.b_function + ":\t[" +
+                BDD_USE_result + "]\t[" + Alternative_result + "]");
                 failure++;
-                // System.out.println(Alphabet + "|");
-                // System.out.println(Arguments + "|\t:" + Tree.Root.b_function + ":\t[" + BDD_USE_result + "]\t["
-                // + Alternative_result + "]");
             }else{
                 assertEquals(BDD_USE_result, Alternative_result);
             }
@@ -114,12 +112,12 @@ class AppTest {
     @Test
     void HashCode_TEST() {
         String function = "";
-        long hash = 0;
+        String  hash = "";
        
         System.out.println("Alphabet : " + Alphabet + "\n");
         for (int i = 0; i < HashCode_COUNT; i++) {
             function = (DNF.GenerateDNF(Alphabet, 10));
-            hash = DNF.HashCode(function, Alphabet);
+            hash = DNF.HashCode(function, Alphabet).toString();
             System.out.println(function);
             System.out.println("Hash: " + hash);
             System.out.println("--------------------------------");

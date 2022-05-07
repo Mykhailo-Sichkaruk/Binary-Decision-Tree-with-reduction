@@ -1,15 +1,17 @@
 package com.example;
 
+import java.math.BigInteger;
+
 /**
  * This class represents basic object KEY:VALUE idea
  * KEY : hash of Boolean Function
  * VALUE : Pointer to BDD_Node that represents Boolean function
  */
 public class KeyValue{
-    private long hash;
+    private BigInteger hash;
     public BDD_Node Node;
 
-    KeyValue(long key, BDD_Node value){
+    KeyValue(BigInteger key, BDD_Node value){
         this.setHash(key);
         this.setNode(value);
     }
@@ -31,14 +33,14 @@ public class KeyValue{
     /**
      * @return the hash
      */
-    public long getHash() {
+    public BigInteger getHash() {
         return hash;
     }
 
     /**
      * @param key the hash to set
      */
-    public void setHash(long key) {
+    public void setHash(BigInteger key) {
         this.hash = key;
     }
 }
