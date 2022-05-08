@@ -4,8 +4,8 @@ import java.math.BigInteger;
 
 public class BDD_Tree {
     public BDD_Node ROOT = null;
-    private String Order = "";
-    private int nodeCount = 0;
+    String Order = "";
+    int nodeCount = 0;
     private final BDD_Node ONE = new BDD_Node("1", "", "");
     private final BDD_Node ZERO = new BDD_Node("0", "", "");;
 

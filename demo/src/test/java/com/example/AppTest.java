@@ -14,7 +14,7 @@ class AppTest {
     private final static int BDDuse_COUNT = 1000;
     private final static int Generate_COUNT = 100;
     private final static int HashCode_COUNT = 100;
-    private final static String Alphabet = "ABCDEFGHIJKLN";
+    private final static String Alphabet = "ABCDEFGHIJKLMN";
 
     private static int DEFAULT_TEST_COUNT = 100;
     private static int failure = 0;
@@ -28,9 +28,32 @@ class AppTest {
             String Bfunction = DNF.Generate(Alphabet, 10, Alphabet.length() + 1);
             BDD_Tree Tree = new BDD_Tree(Bfunction, Alphabet);
             BDDuse_test(Tree);
-            Tree.PrintTree();
-            System.out.println(failure);
+            int percentage = reductionPercentage(Tree.nodeCount, Tree.Order.length());
+            printPercentage(percentage);
+            //Tree.PrintTree();
+            //System.out.println(failure);
         }
+    }
+
+    int reductionPercentage(int nodeCount, int variablesCount){
+        int maxNodeCount = (int) Math.pow(2, variablesCount);
+        int reductionPercentage = (maxNodeCount - nodeCount) *100 / maxNodeCount;
+         return reductionPercentage;
+    } 
+
+    void printPercentage(int percent){
+        
+        String TEXT_RED    = "\u001B[31m";
+        String TEXT_GREEN  = "\u001B[32m";
+        String TEXT_YELLOW = "\u001B[33m";
+        String color;
+        if(percent > 90)
+            color = TEXT_GREEN;
+        else if(percent > 75)
+            color = TEXT_YELLOW;
+        else
+            color = TEXT_RED;
+        System.out.println(percent + color);
     }
 
     void BDDuse_test(BDD_Tree Tree) {
