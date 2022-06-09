@@ -3,7 +3,6 @@ package com.example;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Random;
 
 /**
  * Class that provides functionality in
@@ -14,6 +13,8 @@ import java.util.Random;
  */
 public class DNF {
 
+    private static final Random rand = new Random();
+
     /**
      * Returns String DNF from Array of conjunctions
      * 
@@ -21,9 +22,9 @@ public class DNF {
      * @return
      *         Example :: "AB", "AC", "BC" ==> "AB+AC+BC"
      */
-    private static String ConjunctionArrayToDNF(String[] stringArray) {
+    private static String convertToString(String[] stringArray) {
         String result = "";
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < stringArray.length; i++) {
             sb.append("+" + stringArray[i]);
         }
@@ -39,35 +40,33 @@ public class DNF {
      * @return
      *         Example :: "AB", "A", "AC", "BC", "A", "AB" ==> "AB", "A", "AC", "BC"
      */
-    private static String[] DeleteDuplicates(String[] conjunction) {
-        ArrayList<String> result_NOduplicates_ArrayList = new ArrayList<String>();
+    private static String[] removeDuplicates(String[] conjunction) {
+        ArrayList<String> uniqueNodes = new ArrayList<>();
 
         for (int i = 0; i < conjunction.length; i++) {
             // Push if there wasn`t such before
-            if (!result_NOduplicates_ArrayList.contains(conjunction[i])) {
-                result_NOduplicates_ArrayList.add(conjunction[i]);
+            if (!uniqueNodes.contains(conjunction[i])) {
+                uniqueNodes.add(conjunction[i]);
             }
         }
-        String[] result_NOduplicates = result_NOduplicates_ArrayList
-                .toArray(new String[result_NOduplicates_ArrayList.size()]);
-        return result_NOduplicates;
+        return uniqueNodes.toArray(new String[uniqueNodes.size()]);
     }
 
     /**
      * Gets conjuction and make it prettier -
      * Removes duplicates of variables, put variables in specified order
      * 
-     * @param b_function
+     * @param bFunction
      * @param order
      * @return
      *         Example :: BBCCAA ==> ABC (if order = "ABC")
      */
-    private static String PrettyConjunction(String b_function, String order) {
+    private static String prettyConjunction(String bFunction, String order) {
         String result = "";
         for (int i = 0; i < order.length(); i++) {
-            if (b_function.contains("!" + String.valueOf(order.charAt(i)))) {
-                result += "!" + String.valueOf(order.charAt(i));
-            } else if (b_function.contains(String.valueOf(order.charAt(i)))) {
+            if (bFunction.contains("!" + order.charAt(i))) {
+                result += "!" + order.charAt(i);
+            } else if (bFunction.contains(String.valueOf(order.charAt(i)))) {
                 result += String.valueOf(order.charAt(i));
             }
         }
@@ -84,19 +83,19 @@ public class DNF {
      * @return
      *         Example :: BAC+CCA+DDD+!A!B!A ==> ABC+AC+!A!B+D (if order = "ABCD")
      */
-    private static String[] Pretty(String[] conjunction, String order) {
+    private static String[] pretty(String[] conjunction, String order) {
         String[] result = conjunction;
 
         // Make prettier every conjunction
         for (int i = 0; i < result.length; i++) {
-            result[i] = PrettyConjunction(result[i], order);
+            result[i] = prettyConjunction(result[i], order);
         }
 
         // Bubble sort to put biggest conjunction in beggining of array
         String buf;
         for (int i = 0; i < result.length - 1; i++) {
             for (int j = 0; j < result.length - i - 1; j++) {
-                if (result[j].replaceAll("!", "").length() <= result[j + 1].replaceAll("!", "")
+                if (result[j].replace("!", "").length() <= result[j + 1].replace("!", "")
                         .length()) {
                     buf = result[j];
                     result[j] = result[j + 1];
@@ -105,7 +104,7 @@ public class DNF {
             }
         }
 
-        result = DeleteDuplicates(result);
+        result = removeDuplicates(result);
         return result;
     }
 
@@ -123,52 +122,52 @@ public class DNF {
      * @return
      *         Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
      */
-    public static String SubstituteVariable(boolean state, String letter, String Bfunction, String order) {
-        if (Bfunction.equals("1"))
+    public static String substituteVariable(boolean state, String letter, String bFunction, String order) {
+        if (bFunction.equals("1"))
             return "1";
-        else if (Bfunction.equals("0"))
+        else if (bFunction.equals("0"))
             return "0";
 
         // Preparing---------------------
         String result = "";
-        String[] sub_finctions = Bfunction.split("\\+");
+        String[] subFunction = bFunction.split("\\+");
 
-        sub_finctions = Pretty(sub_finctions, order);
+        subFunction = pretty(subFunction, order);
 
         // Substitution--------------------
         if (state) { // If A = 1
-            for (int i = 0; i < sub_finctions.length; i++) {
+            for (int i = 0; i < subFunction.length; i++) {
                 // If there is !A - forget this conjunction
-                if (sub_finctions[i].contains("!" + letter)) {
+                if (subFunction[i].contains("!" + letter)) {
                     // Nothing
                 } // If there is A - replace with "1", push to result
-                else if (sub_finctions[i].equals(letter))
+                else if (subFunction[i].equals(letter))
                     return "1";
-                else if (sub_finctions[i].contains(letter)) {
-                    result += "+" + sub_finctions[i].replaceAll(letter, "");
+                else if (subFunction[i].contains(letter)) {
+                    result += "+" + subFunction[i].replaceAll(letter, "");
                 } // If there are not A or !A - push to result
                 else
-                    result += "+" + sub_finctions[i];
+                    result += "+" + subFunction[i];
             }
         } else { // If A = 0
-            for (int i = 0; i < sub_finctions.length; i++) {
+            for (int i = 0; i < subFunction.length; i++) {
                 // If there is !A
-                if (sub_finctions[i].contains("!" + letter)) {
+                if (subFunction[i].contains("!" + letter)) {
                     // If there is !A*A == 0
-                    if (sub_finctions[i].replaceAll("!" + letter, "1").contains(letter)) {
+                    if (subFunction[i].replaceAll("!" + letter, "1").contains(letter)) {
                         // Nothing
                     } // If single !A - replace with "1", push to result
-                    else if (sub_finctions[i].equals("!" + letter))
+                    else if (subFunction[i].equals("!" + letter))
                         return "1";
                     else {
-                        result += "+" + sub_finctions[i].replaceAll("!" + letter, "");
+                        result += "+" + subFunction[i].replaceAll("!" + letter, "");
                     }
                 } // If there is A - forget this conjunction
-                else if (sub_finctions[i].contains(letter)) {
+                else if (subFunction[i].contains(letter)) {
                     // Nothing
                 } // If there are not A or !A - push to result
                 else
-                    result += "+" + sub_finctions[i];
+                    result += "+" + subFunction[i];
             }
         }
 
@@ -180,7 +179,7 @@ public class DNF {
 
         // Removes duplicates after substitution of variable
 
-        result = ConjunctionArrayToDNF(Pretty(result.split("\\+"), order));
+        result = convertToString(pretty(result.split("\\+"), order));
 
         return result;
     }
@@ -188,92 +187,41 @@ public class DNF {
     /**
      * Returns uniq ID that represents
      * 
-     * @param b_func
+     * @param bFunc
      * @return
      */
-    public static BigInteger HashCode(String b_func, String order) {
-        if (b_func.equals("1"))
+    public static BigInteger hashCode(String bFunc, String order) {
+        if (bFunc.equals("1"))
             return BigInteger.valueOf(0);
-        else if (b_func.equals("0"))
+        else if (bFunc.equals("0"))
             return BigInteger.valueOf(1);
 
-        long result = 1;
         BigInteger res = BigInteger.valueOf(1);
-        int conjunction_code = 0;
+        int conjunctionCode = 0;
 
-        String[] conjunction = b_func.split("\\+");
+        String[] conjunction = bFunc.split("\\+");
 
         for (int i = 0; i < conjunction.length; i++) {
-            conjunction_code = 0;
+            conjunctionCode = 0;
             for (int j = 0; j < order.length(); j++) {
-                if (conjunction[i].contains("!" + String.valueOf(order.charAt(j)))) {
-                    conjunction_code += 2 * Math.pow(3, j);
+                if (conjunction[i].contains("!" + order.charAt(j))) {
+                    conjunctionCode += 2 * Math.pow(3, j);
                 } else if (conjunction[i].contains(String.valueOf(order.charAt(j)))) {
-                    conjunction_code += Math.pow(3, j);
+                    conjunctionCode += Math.pow(3, j);
                 }
             }
-            if (conjunction_code == 0)
-                conjunction_code = 1;
+            if (conjunctionCode == 0)
+                conjunctionCode = 1;
 
-            // System.out.print("*" + conjunction_code);
-            // if (order.length() > 8)
-            // result += (result * conjunction_code) % 1234;
-            // else
+            res = res.multiply(BigInteger.valueOf(conjunctionCode));
+        }
 
-            // if ((result * conjunction_code) > 922337203685477580L) {
-            //     result %= 10000000000L;
-            //     result++;
-            //     result *= conjunction_code;
-            //     //System.out.print("-");
-            // } else
-            //     result *= conjunction_code;}
-                
-            res = res.multiply(BigInteger.valueOf(conjunction_code));
-            }
-        
-        // System.out.print("\n");
-        // result += Math.pow(10, String.valueOf(result).length()) * conjunction.length;
-        //
-        int digits =  conjunction.length;
+        int digits = conjunction.length;
         BigInteger sub = (BigInteger.valueOf(10l)).pow(res.toString().length());
         sub = sub.multiply(BigInteger.valueOf(digits));
         res = res.add(sub);
         return res;
     }
-
-    // public static BigInteger HashCodeBig(String b_func, String order) {
-    // if (b_func.equals("1"))
-    // return 1;
-    // else if (b_func.equals("0"))
-    // return 0;
-
-    // long result = 1;
-    // int conjunction_code = 0;
-
-    // String[] conjunction = b_func.split("\\+");
-
-    // for (int i = 0; i < conjunction.length; i++) {
-    // conjunction_code = 0;
-    // for (int j = 0; j < order.length(); j++) {
-    // if (conjunction[i].contains("!" + String.valueOf(order.charAt(j)))) {
-    // conjunction_code += 2 * Math.pow(3, j);
-    // } else if (conjunction[i].contains(String.valueOf(order.charAt(j)))) {
-    // conjunction_code += Math.pow(3, j);
-    // }
-    // }
-    // if (conjunction_code == 0)
-    // conjunction_code = 1;
-
-    // System.out.print("*" + conjunction_code);
-    // result *= conjunction_code;
-
-    // }
-    // System.out.print("\n");
-
-    // result += Math.pow(10, String.valueOf(result).length()) * conjunction.length;
-    // System.out.println(result);
-    // return result;
-    // }
 
     /**
      * Returns random DNF
@@ -284,16 +232,14 @@ public class DNF {
      * @return String DNF
      *         Example :: "BAC+!AD+DB+C!A"
      */
-    public static String Generate(String alphabet, int conjunctionsMaxCount, int conjunctionMaxLength) {
+    public static String generatePretty(String alphabet, int conjunctionsMaxCount, int conjunctionMaxLength) {
         String result = "";
-        Random rand = new Random();
-
         conjunctionsMaxCount = rand.nextInt(conjunctionsMaxCount);
         for (int i = 0; i < conjunctionsMaxCount; i++) {
-            int conjunction_lenght = rand.nextInt(conjunctionMaxLength);
-            if (conjunction_lenght > 0) {
+            int conjunctionLength = rand.nextInt(conjunctionMaxLength);
+            if (conjunctionLength > 0) {
                 result += "+";
-                for (int j = 0; j < conjunction_lenght; j++) {
+                for (int j = 0; j < conjunctionLength; j++) {
                     result += ((rand.nextBoolean()) ? "!" : "") + alphabet.charAt(rand.nextInt(alphabet.length()));
                 }
             }
@@ -310,25 +256,25 @@ public class DNF {
     /**
      * Returns result of substitution of variables in DNF function- "0" or "1"
      * 
-     * @param State     : array of variables value - "1010"
-     * @param Bfunction : DNF function - "A!B+CD+!AD"
-     * @param Order     : Varibles thas appears in Bfunction - "ABCD"
+     * @param variablesValue : array of variables value - "1010"
+     * @param bFunction      : DNF function - "A!B+CD+!AD"
+     * @param order          : Varibles thas appears in Bfunction - "ABCD"
      * @return
      *         "1" / "0"
      */
-    public static char SubstituteAllVariables(String State, String Bfunction, String Order) {
-        String result = Bfunction;
+    public static char substituteAllVariables(String variablesValue, String bFunction, String order) {
+        String result = bFunction;
         String letter;
 
-        if (State.length() != Order.length()) {
+        if (variablesValue.length() != order.length()) {
             System.out.println("ERR");
             return '9';
         }
 
-        for (int i = 0; i < Order.length(); i++) {
-            letter = String.valueOf(Order.charAt(i));
+        for (int i = 0; i < order.length(); i++) {
+            letter = String.valueOf(order.charAt(i));
 
-            if (State.charAt(i) == '1') {
+            if (variablesValue.charAt(i) == '1') {
                 result = result.replaceAll("!" + letter, "0");
                 result = result.replaceAll(letter, "1");
             } else {
@@ -340,11 +286,8 @@ public class DNF {
         String[] conjunction = result.split("\\+");
 
         for (int i = 0; i < conjunction.length; i++) {
-            if (conjunction[i].contains("0")) {
-
-            } else {
+            if (!conjunction[i].contains("0"))
                 return '1';
-            }
 
         }
 
@@ -354,38 +297,40 @@ public class DNF {
     /**
      * Returns random DNF - without repeats, in Alphabet order
      * 
-     * @param Alphabet         - Letter that will be used in DNF
-     * @param ConjunctionCount - Count of conjunctions (random by default)
+     * @param alphabet          - Letter that will be used in DNF
+     * @param conjunctionsCount - Count of conjunctions (random by default)
      * @return String DNF
      * @Example "ABC+!AD+BD+!AC"
      */
-    public static String GenerateDNF(String Alphabet, Integer ConjunctionCount) {
+    public static String generateDNF(String alphabet, Integer conjunctionsCount) {
         String result = "";
         String conjunction = "";
-        Random rand = new Random();
-        if (ConjunctionCount == null) {
-            ConjunctionCount = rand.nextInt(Alphabet.length() + 1);
-        }
+        if (conjunctionsCount == null)
+            conjunctionsCount = rand.nextInt(alphabet.length() + 1);
 
-        for (int i = 0; i < ConjunctionCount; i++) {
-            int conjunction_lenght = rand.nextInt(Alphabet.length());
-            if (conjunction_lenght > 0) {
-                conjunction = "";
-                for (int j = 0; j < Alphabet.length(); j++) {
-                    if (rand.nextBoolean())
-                        conjunction += ((rand.nextBoolean()) ? "!" : "") + Alphabet.charAt(j);
-                }
+        for (int i = 0; i < conjunctionsCount; i++) {
+            int conjunctionLength = rand.nextInt(alphabet.length());
+            if (conjunctionLength > 0) {
+                conjunction = generateConjunction(alphabet);
                 if (conjunction.length() != 0)
                     result += "+" + conjunction;
             }
         }
 
         if (result.length() <= 1)
-            return ((rand.nextBoolean()) ? "!" : "") + Alphabet.charAt(rand.nextInt(Alphabet.length()));
-        else {
-            result = result.substring(1);
-            return result;
+            return ((rand.nextBoolean()) ? "!" : "") + alphabet.charAt(rand.nextInt(alphabet.length()));
+        else
+            return result.substring(1);
+    }
+
+    private static String generateConjunction(String alphabet) {
+        String result = "";
+        for (int j = 0; j < alphabet.length(); j++) {
+            if (rand.nextBoolean())
+                result += ((rand.nextBoolean()) ? "!" : "") + alphabet.charAt(j);
         }
+
+        return result;
     }
 
 }

@@ -7,11 +7,11 @@ import java.math.BigInteger;
  * KEY : hash of Boolean Function
  * VALUE : Pointer to BDD_Node that represents Boolean function
  */
-public class KeyValue{
+public class NodeObject {
     private BigInteger hash;
-    public BDD_Node Node;
+    private TreeNode node;
 
-    KeyValue(BigInteger key, BDD_Node value){
+    NodeObject(BigInteger key, TreeNode value) {
         this.setHash(key);
         this.setNode(value);
     }
@@ -19,15 +19,15 @@ public class KeyValue{
     /**
      * @return the node
      */
-    public BDD_Node getNode() {
-        return Node;
+    public TreeNode getNode() {
+        return node;
     }
 
     /**
      * @param node the node to set
      */
-    public void setNode(BDD_Node node) {
-        this.Node = node;
+    public void setNode(TreeNode node) {
+        this.node = node;
     }
 
     /**
