@@ -4,14 +4,14 @@ import java.math.BigInteger;
 
 public class BDD_Tree {
     public BDD_Node ROOT = null;
-    String Order = "";
+    String ORDER = "";
     int nodeCount = 0;
     private final BDD_Node ONE = new BDD_Node("1", "", "");
     private final BDD_Node ZERO = new BDD_Node("0", "", "");;
 
     BDD_Tree(String bFunction, String order) {
         // Creating: Root, "1", "0"
-        this.Order = order;
+        this.ORDER = order;
         String prettierFunction = DNF.SubstituteVariable(true, "Z", bFunction, "Z" + order);
         this.ROOT = new BDD_Node(prettierFunction, String.valueOf(order.charAt(0)), order);
         this.nodeCount += 3;
@@ -150,13 +150,13 @@ public class BDD_Tree {
     }
 
     public void PrintTree() {
-        for (int i = 1; i <= this.Order.length(); i++) {
+        for (int i = 1; i <= this.ORDER.length(); i++) {
             PrintLvl(i, 1, this.ROOT);
             System.out.println("\n-------------------------------");
         }
         System.out.println("\t" + "[" + this.ZERO.b_function + "]" + "\t" + "[" + this.ONE.b_function + "]");
 
-        int NodesMaxCount = ((int) (Math.pow(2, this.Order.length())));
+        int NodesMaxCount = ((int) (Math.pow(2, this.ORDER.length())));
         float count = (float) this.nodeCount;
         double ReductionRate = (count / NodesMaxCount);
         System.out.println("Count of node in the Tree      : " + this.nodeCount);
@@ -207,14 +207,14 @@ public class BDD_Tree {
      * @return the order
      */
     public String getOrder() {
-        return Order;
+        return ORDER;
     }
 
     /**
      * @param order the order to set
      */
     public void setOrder(String order) {
-        Order = order;
+        ORDER = order;
     }
 
 }
