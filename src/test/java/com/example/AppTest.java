@@ -42,12 +42,20 @@ class AppTest {
         System.out.println("Errors ocured : " + failure);
     }
 
+    /**
+     * @param nodeCount
+     * @param variablesCount
+     * @return double
+     */
     double reductionPercentage(int nodeCount, int variablesCount) {
         int maxNodeCount = (int) Math.pow(2, variablesCount);
         double reductionPercentage = (maxNodeCount - nodeCount) * 100 / maxNodeCount;
         return reductionPercentage;
     }
 
+    /**
+     * @param percent
+     */
     void printPercentage(double percent) {
 
         String TEXT_RED = "\u001B[31m";
@@ -64,6 +72,9 @@ class AppTest {
         System.out.println(percent + color);
     }
 
+    /**
+     * @param tree
+     */
     void testOneBddUse(BinaryTree tree) {
         char result = ' ';
         char alternativeResult = ' ';

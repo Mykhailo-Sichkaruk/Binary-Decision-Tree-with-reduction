@@ -3,5 +3,5 @@
 
 
 
-- Read task here : [task](Task.pdf)
-- Read documentation here : [docs](Documentation.pdf)
+- Read task here : [task](/Documentation/Task.pdf)
+- Read documentation here : [docs](/Documentation/Documentation.pdf)

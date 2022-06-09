@@ -10,6 +10,9 @@ import java.util.Random;
  * -substitution of one variable in DNF
  * -substitution of all variables in DNF
  * -getting HashCode of DNF
+ *
+ * @author MS
+ * @version $Id: $Id
  */
 public class DNF {
 
@@ -114,13 +117,12 @@ public class DNF {
      * removed duplicates
      * in specified order
      * bigger conjunctions closer to start
-     * 
-     * @param state
-     * @param letter
-     * @param b_function
-     * @param order
-     * @return
-     *         Example :: "AB+!AB+AAAC+BCB+!B!A+!A" (A = 1) ==> "BC+B+C+!B"
+     *
+     * @param state     a boolean
+     * @param letter    a {@link java.lang.String} object
+     * @param order     a {@link java.lang.String} object
+     * @param bFunction a {@link java.lang.String} object
+     * @return a {@link java.lang.String} object
      */
     public static String substituteVariable(boolean state, String letter, String bFunction, String order) {
         if (bFunction.equals("1"))
@@ -186,9 +188,10 @@ public class DNF {
 
     /**
      * Returns uniq ID that represents
-     * 
-     * @param bFunc
-     * @return
+     *
+     * @param bFunc a {@link java.lang.String} object
+     * @param order a {@link java.lang.String} object
+     * @return a {@link java.math.BigInteger} object
      */
     public static BigInteger hashCode(String bFunc, String order) {
         if (bFunc.equals("1"))
@@ -225,7 +228,7 @@ public class DNF {
 
     /**
      * Returns random DNF
-     * 
+     *
      * @param alphabet             - letter in DNF
      * @param conjunctionsMaxCount - Max count of conjunctions
      * @param conjunctionMaxLength - Max length of conjunction
@@ -255,12 +258,11 @@ public class DNF {
 
     /**
      * Returns result of substitution of variables in DNF function- "0" or "1"
-     * 
+     *
      * @param variablesValue : array of variables value - "1010"
      * @param bFunction      : DNF function - "A!B+CD+!AD"
      * @param order          : Varibles thas appears in Bfunction - "ABCD"
-     * @return
-     *         "1" / "0"
+     * @return a char
      */
     public static char substituteAllVariables(String variablesValue, String bFunction, String order) {
         String result = bFunction;
@@ -296,11 +298,11 @@ public class DNF {
 
     /**
      * Returns random DNF - without repeats, in Alphabet order
-     * 
+     *
      * @param alphabet          - Letter that will be used in DNF
      * @param conjunctionsCount - Count of conjunctions (random by default)
      * @return String DNF
-     * @Example "ABC+!AD+BD+!AC"
+     *         Example "ABC+!AD+BD+!AC"
      */
     public static String generateDNF(String alphabet, Integer conjunctionsCount) {
         String result = "";
@@ -323,6 +325,10 @@ public class DNF {
             return result.substring(1);
     }
 
+    /**
+     * @param alphabet
+     * @return String
+     */
     private static String generateConjunction(String alphabet) {
         String result = "";
         for (int j = 0; j < alphabet.length(); j++) {

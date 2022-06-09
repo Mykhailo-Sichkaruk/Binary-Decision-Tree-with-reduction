@@ -6,6 +6,9 @@ package com.example;
  * Letter what will be substituted
  * Order of variables - "ABCD"
  * Left and Right pointers to new Nodes with smaller function
+ *
+ * @author MS
+ * @version $Id: $Id
  */
 public class TreeNode {
     private String bFunction;
@@ -23,6 +26,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Getter for the field <code>bFunction</code>.</p>
+     *
      * @return the bFunction
      */
     public String getbFunction() {
@@ -30,6 +35,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Setter for the field <code>bFunction</code>.</p>
+     *
      * @param bFunction the bFunction to set
      */
     public void setbFunction(String bFunction) {
@@ -37,6 +44,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Getter for the field <code>letter</code>.</p>
+     *
      * @return the letter
      */
     public String getLetter() {
@@ -44,6 +53,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Setter for the field <code>letter</code>.</p>
+     *
      * @param letter the letter to set
      */
     public void setLetter(String letter) {
@@ -51,6 +62,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Getter for the field <code>right</code>.</p>
+     *
      * @return the right
      */
     public TreeNode getRight() {
@@ -58,6 +71,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Setter for the field <code>right</code>.</p>
+     *
      * @param right the right to set
      */
     public void setRight(TreeNode right) {
@@ -65,6 +80,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Getter for the field <code>left</code>.</p>
+     *
      * @return the left
      */
     public TreeNode getLeft() {
@@ -72,6 +89,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Setter for the field <code>left</code>.</p>
+     *
      * @param left the left to set
      */
     public void setLeft(TreeNode left) {
@@ -79,6 +98,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Getter for the field <code>order</code>.</p>
+     *
      * @return the order
      */
     public String getOrder() {
@@ -86,6 +107,8 @@ public class TreeNode {
     }
 
     /**
+     * <p>Setter for the field <code>order</code>.</p>
+     *
      * @param order the order to set
      */
     public void setOrder(String order) {

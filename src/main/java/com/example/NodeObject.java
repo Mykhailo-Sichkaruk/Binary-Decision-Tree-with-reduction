@@ -6,6 +6,9 @@ import java.math.BigInteger;
  * This class represents basic object KEY:VALUE idea
  * KEY : hash of Boolean Function
  * VALUE : Pointer to BDD_Node that represents Boolean function
+ *
+ * @author MS
+ * @version $Id: $Id
  */
 public class NodeObject {
     private BigInteger hash;
@@ -17,6 +20,8 @@ public class NodeObject {
     }
 
     /**
+     * <p>Getter for the field <code>node</code>.</p>
+     *
      * @return the node
      */
     public TreeNode getNode() {
@@ -24,6 +29,8 @@ public class NodeObject {
     }
 
     /**
+     * <p>Setter for the field <code>node</code>.</p>
+     *
      * @param node the node to set
      */
     public void setNode(TreeNode node) {
@@ -31,6 +38,8 @@ public class NodeObject {
     }
 
     /**
+     * <p>Getter for the field <code>hash</code>.</p>
+     *
      * @return the hash
      */
     public BigInteger getHash() {
@@ -38,6 +47,8 @@ public class NodeObject {
     }
 
     /**
+     * <p>Setter for the field <code>hash</code>.</p>
+     *
      * @param key the hash to set
      */
     public void setHash(BigInteger key) {

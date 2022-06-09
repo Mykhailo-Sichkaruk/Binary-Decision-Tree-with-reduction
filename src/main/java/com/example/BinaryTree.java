@@ -2,6 +2,12 @@ package com.example;
 
 import java.math.BigInteger;
 
+/**
+ * <p>BinaryTree class.</p>
+ *
+ * @author MS
+ * @version $Id: $Id
+ */
 public class BinaryTree {
     TreeNode root = null;
     String order = "";
@@ -146,6 +152,9 @@ public class BinaryTree {
 
     }
 
+    /**
+     * <p>printTree.</p>
+     */
     public void printTree() {
         for (int i = 1; i <= this.order.length(); i++) {
             printLvl(i, 1, this.root);
@@ -163,6 +172,11 @@ public class BinaryTree {
         System.out.println("================================================================================");
     }
 
+    /**
+     * @param lvl
+     * @param current
+     * @param root
+     */
     private void printLvl(int lvl, int current, TreeNode root) {
         if (lvl == current) {
             System.out.print("[" + root.getbFunction() + "] ");
@@ -176,10 +190,11 @@ public class BinaryTree {
     }
 
     /**
-     * 
-     * @param arguments
-     * @param root
-     * @return
+     * <p>bddUse.</p>
+     *
+     * @param arguments a {@link java.lang.String} object
+     * @param root a {@link com.example.TreeNode} object
+     * @return a char
      */
     public char bddUse(String arguments, TreeNode root) {
         char result = '-';
@@ -201,6 +216,8 @@ public class BinaryTree {
     }
 
     /**
+     * <p>Getter for the field <code>order</code>.</p>
+     *
      * @return the order
      */
     public String getOrder() {
@@ -208,7 +225,9 @@ public class BinaryTree {
     }
 
     /**
-     * @param order the order to set
+     * <p>Setter for the field <code>order</code>.</p>
+     *
+     * @param newOrder a {@link java.lang.String} object
      */
     public void setOrder(String newOrder) {
         order = newOrder;
