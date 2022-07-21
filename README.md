@@ -1,4 +1,4 @@
-# Bianary-Decision-Tree-with-reduction
+# Binary-Decision-Tree-with-reduction
 
 Binary decision tree with no redundant nodes. Completely tested, with own generators.
 
